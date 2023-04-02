@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 
-import { addContact } from 'redux/phonebook.slice';
+import { addContact, getContacts } from 'redux/phonebook.slice';
 
 import styles from './ContactForm.module.css';
 
@@ -14,7 +14,7 @@ const ContactForm = () => {
 
   const dispatch = useDispatch();
 
-  const contacts = useSelector(state => state.phonebook.contacts);
+  const contacts = useSelector(getContacts);
 
   const changeHandler = event => {
     const { name, value } = event.currentTarget;
@@ -25,21 +25,25 @@ const ContactForm = () => {
   const submitHandler = event => {
     event.preventDefault();
 
-    const contactNames = contacts.map(contact => contact.name);
+    const { name, number } = contact;
 
-    if (!contactNames.includes(contact.name)) {
+    const isNameAlreadyExist = contacts.some(contact => contact.name === name);
+
+    if (isNameAlreadyExist) {
+      alert(`'${name}' is in contacts already.`);
+
+      return;
+    } else {
       dispatch(
         addContact({
           id: nanoid(),
-          name: contact.name,
-          number: contact.number,
+          name,
+          number,
         })
       );
-    } else {
-      alert(`${contact.name} is already in contacts.`);
-    }
 
-    setContact({ name: '', number: '' });
+      setContact({ name: '', number: '' });
+    }
   };
 
   return (

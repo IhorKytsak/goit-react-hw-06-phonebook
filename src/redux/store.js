@@ -11,9 +11,8 @@ import {
 } from 'redux-persist/es/constants';
 
 export const store = configureStore({
-  reducer: {
-    phonebook: persistedPhonebookReducer,
-  },
+  reducer: persistedPhonebookReducer,
+
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
